@@ -19,13 +19,36 @@
  */
 
 import React, { createElement } from 'react';
-import { useLocation, matchPath, withRouter } from 'react-router';
+import {
+  matchPath as oldMatchPath,
+  matchRoutes,
+  withRouter,
+  useLocation,
+} from 'react-router';
 
 // eslint-disable-next-line import/extensions, import/no-unresolved, no-unused-vars
 import * as types from '../types/react-router-breadcrumbs-hoc/index';
 
 const DEFAULT_MATCH_OPTIONS = { exact: true };
 const NO_BREADCRUMB = 'NO_BREADCRUMB';
+
+const matchPath = (pathA, { path: pathB }) => {
+  /* istanbul ignore if */
+  if (oldMatchPath) {
+    return oldMatchPath(pathA, { path: pathB });
+  }
+
+  const match = (matchRoutes([{ path: pathB }], pathA) || [])[0];
+
+  if (!match) { return null; }
+
+  return {
+    ...match,
+    url: match.pathname,
+    isExact: false,
+    path: match.pathname,
+  };
+};
 
 /**
  * This method was "borrowed" from https://stackoverflow.com/a/28339742
