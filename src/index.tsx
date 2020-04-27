@@ -21,6 +21,7 @@
 import React, { createElement } from 'react';
 import {
   matchPath as oldMatchPath,
+  // @ts-ignore
   matchRoutes,
   withRouter,
   useLocation,
@@ -32,7 +33,7 @@ import * as types from '../types/react-router-breadcrumbs-hoc/index';
 const DEFAULT_MATCH_OPTIONS = { exact: true };
 const NO_BREADCRUMB = 'NO_BREADCRUMB';
 
-const matchPath = (pathA, { path: pathB }) => {
+const matchPath = (pathA: string, { path: pathB }: { path: string }) => {
   /* istanbul ignore if */
   if (oldMatchPath) {
     return oldMatchPath(pathA, { path: pathB });
@@ -137,8 +138,6 @@ const getBreadcrumbMatch = ({
   // current path should not include a breadcrumb.
   const getIsPathExcluded = (path: string) => matchPath(pathSection, {
     path,
-    exact: true,
-    strict: false,
   });
   if (excludePaths && excludePaths.some(getIsPathExcluded)) {
     return NO_BREADCRUMB;
