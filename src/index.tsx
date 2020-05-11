@@ -19,7 +19,7 @@
  */
 
 import React, { createElement } from 'react';
-import { useLocation, matchPath, withRouter } from 'react-router';
+import { useLocation, matchPath } from 'react-router';
 
 // eslint-disable-next-line import/extensions, import/no-unresolved, no-unused-vars
 import * as types from '../types/react-router-breadcrumbs-hoc/index';
@@ -263,32 +263,11 @@ export default (
     routes: flattenRoutes(routes || []),
   };
 
-  // use the location hook if available (5.x)
-  /* istanbul ignore else */
-  if (useLocation) {
-    return (props: any) => React.createElement(Component, {
-      ...props,
-      breadcrumbs: getBreadcrumbs({
-        ...sharedBreadcrumbProps,
-        location: useLocation(),
-      }),
-    });
-  }
-
-  // fallback to withRouter for older react-router versions (4.x)
-  /* istanbul ignore next */
-  return withRouter(
-    (props: { location: types.Location }) => {
-      // eslint-disable-next-line no-console
-      console.warn('[react-router-breadcrumbs-hoc]: react-router v4 support will be deprecated in the next major release. Please consider upgrading react-router and react-router-dom to >= 5.1.0');
-
-      return createElement(Component, {
-        ...props,
-        breadcrumbs: getBreadcrumbs({
-          ...sharedBreadcrumbProps,
-          location: props.location,
-        }),
-      });
-    },
-  );
+  return (props: any) => React.createElement(Component, {
+    ...props,
+    breadcrumbs: getBreadcrumbs({
+      ...sharedBreadcrumbProps,
+      location: useLocation(),
+    }),
+  });
 };
